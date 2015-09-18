@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/add.png</file>
+        <file>images/about.png</file>
+        <file>images/exit.png</file>
+        <file>images/save.png</file>
+        <file>images/xml.png</file>
+        <file>images/xml_export.png</file>
+        <file>images/xml_import.png</file>
+        <file>images/arrowright.png</file>
+        <file>images/support.png</file>
+        <file>images/lock.png</file>
+        <file>images/cancel.png</file>
+        <file>images/accept.png</file>
+        <file>images/confirm.png</file>
+    </qresource>
+</RCC>
