@@ -70,7 +70,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Отправить</string>
+      <string>Send</string>
      </property>
     </widget>
     <widget class="QLabel" name="lblPort">
@@ -99,7 +99,7 @@
       <enum>Qt::RightToLeft</enum>
      </property>
      <property name="text">
-      <string>Авто:</string>
+      <string>Auto:</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="edtPhone">
@@ -164,7 +164,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Итервал (мск):</string>
+      <string>Interval (us):</string>
      </property>
     </widget>
    </widget>

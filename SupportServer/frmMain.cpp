@@ -30,7 +30,6 @@ void frmMain::slotSendDatagram()
     }
     out << ui->edtPhone->text();
     udpSock->writeDatagram(baDatagram, QHostAddress(ui->edtIP->text()), ui->edtUdpPort->text().toInt());
-    //udpSock->writeDatagram(baDatagram, QHostAddress::LocalHost, ui->edtUdpPort->text().toInt());
 }
 //----------------------------------------------------------------------------------------------------------------------
 
