@@ -15,10 +15,10 @@ int main(int argc, char *argv[])
 
     QString dbName = QApplication::applicationDirPath() + "/db/support.db";
     if (!QFileInfo::exists(dbName)) {
-        dbName = QFileDialog::getOpenFileName(0, "Открыть файл", QDir::currentPath() + "/db");
+        dbName = QFileDialog::getOpenFileName(0, "Open file", QDir::currentPath() + "/db");
     }
     if (dbName == "") {
-        QMessageBox::warning( 0 , "Ошибка", "Без базы данных дальнейшая работа не возможна");
+        QMessageBox::warning( 0 , "Error", "Without the database, work impossible");
         return 0;
     }
 

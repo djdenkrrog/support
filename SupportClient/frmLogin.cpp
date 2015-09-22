@@ -13,7 +13,6 @@ frmLogin::frmLogin(QWidget *parent, frmMain *pFromMain) :
 {
     ui->setupUi(this);
 
-    // устанавливаем иконки на кнопки
     ui->btnEnter->setIcon(QIcon(":/images/confirm.png"));
     ui->btnCancel->setIcon(QIcon(":/images/cancel.png"));
     ui->edtPassword->setEchoMode(QLineEdit::Password);
@@ -37,7 +36,7 @@ void frmLogin::frmEnter()
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(dbName);
     if (!db.open()) {
-        QMessageBox::warning( 0 , tr("Ошибка открытия БД!"), db.lastError().databaseText());
+        QMessageBox::warning( 0 , tr("Error opening DB!"), db.lastError().databaseText());
     }
 
     if (checkLogin())
@@ -56,7 +55,7 @@ void frmLogin::frmEnter()
             fMain->userInfo.name2 = query.value(rec.indexOf("name2")).toString();
             fMain->userInfo.name3 = query.value(rec.indexOf("name3")).toString();
         } else {
-            QMessageBox::warning( 0 , tr("Ошибка выполнения sql запроса!"), query.lastError().driverText());
+            QMessageBox::warning( 0 , tr("Error execution sql query!"), query.lastError().driverText());
         }
 
         animationForm();
@@ -85,10 +84,10 @@ bool frmLogin::checkLogin()
         if (countTry == 3 && !result) {
             close();
         } else if (!result) {
-            QMessageBox::warning( 0 , tr("Ошибка ввода пароля!"), QString(tr("Не вверно веден логин или пароль. \nОсталось попыток: %1")).arg((3 - countTry)));
+            QMessageBox::warning( 0 , tr("Failed password entry!"), QString(tr("Incorrect login or password. \nAttempts remaining: %1")).arg((3 - countTry)));
         }
     } else {
-        QMessageBox::warning( 0 , tr("Ошибка выполнения sql запроса!"), query.lastError().driverText());
+        QMessageBox::warning( 0 , tr("Error execution sql query!"), query.lastError().driverText());
     }
 
     return result;

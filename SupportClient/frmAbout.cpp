@@ -18,13 +18,13 @@ frmAbout::frmAbout(QWidget *parent) :
 
     connect(ui->btnClose, SIGNAL(clicked(bool)), SLOT(close()));
 
-    nameProg = tr("Программа Support v.: 1.0.0.1");
-    note = tr("Программа Support предназначена для записи операторм входящих звонков." \
-              "\nДемо версия демонстрирует работу с: " \
-              "\n 1. Базами данных;" \
-              "\n 2. XML документами;" \
-              "\n 3. Работа с сетью;" \
-              "\n 4. Работа с анмацией;"
+    nameProg = tr("Programm Support v.: 1.0.0.1");
+    note = tr("Program Support is provided for recording incoming calls operator." \
+              "\nDemo demonstrates how to: " \
+              "\n 1. Data base;" \
+              "\n 2. XML documents;" \
+              "\n 3. Work with network;" \
+              "\n 4. Work with animation;"
               );
     ui->lblNameProg->setText(nameProg);
     ui->lblNote->setText(note);

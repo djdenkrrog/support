@@ -63,7 +63,7 @@
          <item>
           <widget class="QPushButton" name="btnCallAdd">
            <property name="text">
-            <string>Взять в работу</string>
+            <string>Get to work</string>
            </property>
           </widget>
          </item>
@@ -99,7 +99,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>Перенести данные</string>
+            <string>Move item</string>
            </property>
            <property name="text">
             <string/>
@@ -165,14 +165,14 @@
          <item row="1" column="0">
           <widget class="QLabel" name="lblPhone">
            <property name="text">
-            <string>Телефон</string>
+            <string>Phone</string>
            </property>
           </widget>
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="lblName1">
            <property name="text">
-            <string>Фамилия</string>
+            <string>Surname</string>
            </property>
           </widget>
          </item>
@@ -182,7 +182,7 @@
          <item row="3" column="0">
           <widget class="QLabel" name="lblName2">
            <property name="text">
-            <string>Имя</string>
+            <string>Name</string>
            </property>
           </widget>
          </item>
@@ -192,7 +192,7 @@
          <item row="4" column="0">
           <widget class="QLabel" name="lblName3">
            <property name="text">
-            <string>Отчество</string>
+            <string>Patronymic</string>
            </property>
           </widget>
          </item>
@@ -202,7 +202,7 @@
          <item row="5" column="0">
           <widget class="QLabel" name="lblQuestion">
            <property name="text">
-            <string>Вопрос</string>
+            <string>Question</string>
            </property>
           </widget>
          </item>
@@ -212,7 +212,7 @@
          <item row="6" column="0">
           <widget class="QLabel" name="lblAnswer">
            <property name="text">
-            <string>Ответ</string>
+            <string>Answer</string>
            </property>
           </widget>
          </item>
@@ -256,7 +256,7 @@
               </size>
              </property>
              <property name="text">
-              <string>Дата</string>
+              <string>Date</string>
              </property>
             </widget>
            </item>
@@ -305,7 +305,7 @@
               <bool>false</bool>
              </property>
              <property name="text">
-              <string>Сохранить</string>
+              <string>Save</string>
              </property>
             </widget>
            </item>
@@ -331,7 +331,7 @@
          <item>
           <widget class="QPushButton" name="btnClose">
            <property name="text">
-            <string>Выход</string>
+            <string>Exit</string>
            </property>
           </widget>
          </item>
@@ -353,7 +353,7 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>Файл</string>
+     <string>File</string>
     </property>
     <addaction name="actionLoadFromXML"/>
     <addaction name="actionSaveToXML"/>
@@ -362,7 +362,7 @@
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Справка</string>
+     <string>Help</string>
     </property>
     <addaction name="actionAbout"/>
    </widget>
@@ -371,22 +371,22 @@
   </widget>
   <action name="actionAbout">
    <property name="text">
-    <string>О программе</string>
+    <string>About</string>
    </property>
   </action>
   <action name="actionClose">
    <property name="text">
-    <string>Выход</string>
+    <string>Exit</string>
    </property>
   </action>
   <action name="actionLoadFromXML">
    <property name="text">
-    <string>Загрузить с XML</string>
+    <string>Loading an XML</string>
    </property>
   </action>
   <action name="actionSaveToXML">
    <property name="text">
-    <string>Выгрузить в XML</string>
+    <string>Unload to XML</string>
    </property>
   </action>
   <action name="actionChart1">

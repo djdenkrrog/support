@@ -20,7 +20,6 @@ frmMain::frmMain(QWidget *parent) :
     model = new QSqlQueryModel();
     ui->tblGridHistory->setModel(model);
 
-    // устанавливаем иконки на кнопки
     ui->btnCallAdd->setIcon(QIcon(":/images/arrowright.png"));
     ui->btnClose->setIcon(QIcon(":/images/exit.png"));
     ui->actionClose->setIcon(QIcon(":/images/exit.png"));
@@ -48,8 +47,8 @@ frmMain::frmMain(QWidget *parent) :
     connect(udpSock, SIGNAL(readyRead()), SLOT(processDatagrams()));
 
     QStringList horizontalHeader;
-    horizontalHeader.append(tr("Вопрос"));
-    horizontalHeader.append(tr("Ответ"));
+    horizontalHeader.append(tr("Question"));
+    horizontalHeader.append(tr("Answer"));
 
     modelExtInfo = new QStandardItemModel;
     modelExtInfo->setHorizontalHeaderLabels(horizontalHeader);
@@ -61,7 +60,7 @@ void frmMain::initDB(QString dbName)
     db = QSqlDatabase::database();
     db.setDatabaseName(dbName);
     if (!db.open()) {
-         QMessageBox::warning(this , tr("Ошибка открытия БД!"), db.lastError().driverText());
+         QMessageBox::warning(this, tr("Error opening DB!"), db.lastError().driverText());
      } else {
          refreshTable();
      }
@@ -83,13 +82,13 @@ void frmMain::refreshTable()
 
     if (query.exec()) {
         model->setQuery(query);
-        model->setHeaderData(0, Qt::Horizontal, tr("Ф.И.О."));
-        model->setHeaderData(1, Qt::Horizontal, tr("Телефон"));
-        model->setHeaderData(2, Qt::Horizontal, tr("Дата"));
+        model->setHeaderData(0, Qt::Horizontal, tr("Full name"));
+        model->setHeaderData(1, Qt::Horizontal, tr("Phone"));
+        model->setHeaderData(2, Qt::Horizontal, tr("Date"));
 
         if (model->lastError().isValid()) {
             qDebug() << model->lastError();
-            QMessageBox::warning(this , tr("Ошибка модели данных!"), model->lastError().driverText());
+            QMessageBox::warning(this, tr("Error data model!"), model->lastError().driverText());
         }
 
         ui->tblGridHistory->resizeRowsToContents();        
@@ -103,7 +102,7 @@ void frmMain::refreshTable()
 
     } else {
         qDebug() << "query.lastQuery " << query.lastQuery();
-        QMessageBox::warning(this , tr("Ошибка выполнения sql запроса!"), query.lastError().driverText());
+        QMessageBox::warning(this, tr("Error execution sql query!"), query.lastError().driverText());
     }
 
 }
@@ -112,7 +111,7 @@ void frmMain::refreshTable()
 void frmMain::callAdd()
 {
     if (ui->edtInsertCallPhone->text() == "") {
-        QMessageBox::warning(this , "Ошибка!", "Нет номера телефона входящего звонка.");
+        QMessageBox::warning(this, tr("Error!"), tr("No phone number of incoming call."));
     } else {
         ui->edtPhone->setText(ui->edtInsertCallPhone->text());
         ui->edtDBegin->setText(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss"));
@@ -127,7 +126,7 @@ void frmMain::callAdd()
 void frmMain::callSave()
 {
     if (ui->edtPhone->text() == "") {
-        QMessageBox::warning(this , "Ошибка!", "Нет номера телефона входящего звонка. Сохранение невозможно");
+        QMessageBox::warning(this, tr("Error!"), tr("No phone number of incoming call. Saving is not possible"));
         return;
     }
     QSqlQuery query;
@@ -156,7 +155,7 @@ void frmMain::callSave()
 
         refreshTable();
     } else {
-         QMessageBox::warning(this , "Ошибка!", "Ошибка выполнения запроса.\n" + query.lastError().driverText());
+         QMessageBox::warning(this, tr("Error!"), tr("Error execution sql query!") + "\n" + query.lastError().driverText());
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -208,7 +207,7 @@ void frmMain::loadFromXML()
 {
     QString fileName;
 
-    fileName = QFileDialog::getOpenFileName(this, tr("Открыть файл"), QDir::currentPath(),tr("XML (*.xml)"));
+    fileName = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::currentPath(),tr("XML (*.xml)"));
     if (fileName != "") {
         QDomDocument domDoc;
         QFile file(fileName);
@@ -219,7 +218,7 @@ void frmMain::loadFromXML()
                 eachNode(domElement);
             }
             file.close();
-            QMessageBox::information(this , tr("Загрузка с XML!"), "Загрузка с XML завершена.");
+            QMessageBox::information(this, tr("Loading an XML!"), tr("Loading an XML completed."));
         }
     }
 }
@@ -271,7 +270,7 @@ void frmMain::addItemToDB(const QDomNode& node)
     sqlTxt = "insert into calls (" + fields + ") values (" + values + ");";
     query.prepare(sqlTxt);
     if (!query.exec()) {
-        QMessageBox::warning(this , tr("Ошибка!"), "SQL: " + sqlTxt + "\nDB_Error: " + db.lastError().driverText());
+        QMessageBox::warning(this, tr("Error!"), tr("SQL: ") + sqlTxt + "\nDB_Error: " + db.lastError().driverText());
     }
     refreshTable();
 }
@@ -281,7 +280,7 @@ void frmMain::saveToXML()
 {
     QString fileName;
 
-    fileName = QFileDialog::getSaveFileName(this, tr("Сохранить файл"), QDir::currentPath(), tr("XML (*.xml)"));
+    fileName = QFileDialog::getSaveFileName(this, tr("Save file"), QDir::currentPath(), tr("XML (*.xml)"));
     if (fileName != "") {
         QDomDocument resultXML = xmlCreate();
 
@@ -289,7 +288,7 @@ void frmMain::saveToXML()
         if(file.open(QIODevice::WriteOnly)) {
             QTextStream(&file) << resultXML.toString();
             file.close();
-            QMessageBox::information(this , tr("Выгрузка в XML!"), "Выгрузка в XML завершена.");
+            QMessageBox::information(this, tr("Unload to XML!"), tr("Unload to XML completed."));
         }
     }
 }

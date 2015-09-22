@@ -29,7 +29,7 @@
    <enum>Qt::DefaultContextMenu</enum>
   </property>
   <property name="windowTitle">
-   <string>О программе</string>
+   <string>About</string>
   </property>
   <property name="toolButtonStyle">
    <enum>Qt::ToolButtonIconOnly</enum>
@@ -158,7 +158,7 @@
       <item>
        <widget class="QPushButton" name="btnClose">
         <property name="text">
-         <string>Закрыть</string>
+         <string>Close</string>
         </property>
        </widget>
       </item>
