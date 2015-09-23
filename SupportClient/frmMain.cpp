@@ -46,12 +46,7 @@ frmMain::frmMain(QWidget *parent) :
     udpSock->bind(8091);
     connect(udpSock, SIGNAL(readyRead()), SLOT(processDatagrams()));
 
-    QStringList horizontalHeader;
-    horizontalHeader.append(tr("Question"));
-    horizontalHeader.append(tr("Answer"));
-
     modelExtInfo = new QStandardItemModel;
-    modelExtInfo->setHorizontalHeaderLabels(horizontalHeader);
 }
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -182,13 +177,18 @@ void frmMain::selectionChanged()
 
         QStandardItem *itemQuestion;
         QStandardItem *itemAnswer;
+        QStringList horizontalHeader;
+
+        modelExtInfo->clear();
 
         itemQuestion = new QStandardItem(QString(model->record(rowIdx).value("question").toString()));
         itemAnswer = new QStandardItem(QString(model->record(rowIdx).value("answer").toString()));
-
-        modelExtInfo->clear();
         modelExtInfo->setItem(0, 0, itemQuestion);
         modelExtInfo->setItem(0, 1, itemAnswer);
+
+        horizontalHeader.append(tr("Question"));
+        horizontalHeader.append(tr("Answer"));
+        modelExtInfo->setHorizontalHeaderLabels(horizontalHeader);
 
         ui->tblExtendedInfo->setModel(modelExtInfo);
         ui->tblExtendedInfo->setColumnWidth(0, 190);
