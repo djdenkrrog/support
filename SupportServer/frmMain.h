@@ -21,8 +21,8 @@ public:
 private:
     Ui::FrmMain *ui;
 
-    QUdpSocket* udpSock;
-    QTimer* pTimer;
+    QUdpSocket* m_udpSock;
+    QTimer* m_pTimer;
 
     void generatePhone();
 
