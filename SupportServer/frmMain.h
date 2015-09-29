@@ -7,19 +7,19 @@
 #include <QDateTime>
 
 namespace Ui {
-class frmMain;
+class FrmMain;
 }
 
-class frmMain : public QMainWindow
+class FrmMain : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit frmMain(QWidget *parent = 0);
-    ~frmMain();
+    explicit FrmMain(QWidget *parent = 0);
+    ~FrmMain();
 
 private:
-    Ui::frmMain *ui;
+    Ui::FrmMain *ui;
 
     QUdpSocket* udpSock;
     QTimer* pTimer;

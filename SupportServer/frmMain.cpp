@@ -1,9 +1,9 @@
 #include "frmMain.h"
 #include "ui_frmMain.h"
 
-frmMain::frmMain(QWidget *parent) :
+FrmMain::FrmMain(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::frmMain)
+    ui(new Ui::FrmMain)
 {
     ui->setupUi(this);
 
@@ -19,7 +19,7 @@ frmMain::frmMain(QWidget *parent) :
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::slotSendDatagram()
+void FrmMain::slotSendDatagram()
 {
     qDebug() << "slotSendDatagram";
     QByteArray baDatagram;
@@ -33,7 +33,7 @@ void frmMain::slotSendDatagram()
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::slotSendDatagramAuto()
+void FrmMain::slotSendDatagramAuto()
 {
     if (ui->chbAutoSend->isChecked()) {
         ui->btnSend->setEnabled(false);
@@ -48,7 +48,7 @@ void frmMain::slotSendDatagramAuto()
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::generatePhone()
+void FrmMain::generatePhone()
 {
     ui->edtPhone->setText(QString("%1%2%3%4%5%6%7%8%9%10").arg(qrand()%10).arg(qrand()%10).arg(qrand()%10). \
                           arg(qrand()%10).arg(qrand()%10).arg(qrand()%10).arg(qrand()%10).arg(qrand()%10). \
@@ -56,7 +56,7 @@ void frmMain::generatePhone()
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-frmMain::~frmMain()
+FrmMain::~FrmMain()
 {
     delete ui;
 }
