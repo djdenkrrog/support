@@ -20,4 +20,4 @@ HEADERS  += frmMain.h
 
 FORMS    += frmMain.ui
 
-RC_FILE = supportserver.rc
+RC_FILE = supportServer.rc
