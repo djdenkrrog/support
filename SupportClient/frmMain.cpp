@@ -76,7 +76,7 @@ void FrmMain::refreshTable()
 {
     QSqlQuery query;
 
-    if (ui->edtInsertCallPhone->text() != "") {
+    if (!ui->edtInsertCallPhone->text().isEmpty) {
         query.prepare(QStringLiteral("select name, phone, call_d_begin, question, answer, user_r, \
                                      name1, name2, name3 from v_calls where user_r=:user \
                                      and phone like :phone;"));
@@ -435,7 +435,7 @@ void FrmMain::aboutShow()
 
 void FrmMain::keyPressEvent(QKeyEvent* evnt)
 {
-    if (evnt->modifiers()==Qt::CTRL) {
+    if (evnt->modifiers() == Qt::CTRL) {
         switch (evnt->key()) {
             case Qt::Key_S : callSave();
                 break;
