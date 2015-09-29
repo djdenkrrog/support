@@ -8,14 +8,14 @@ FrmMain::FrmMain(QWidget *parent) :
     ui->setupUi(this);
 
     setWindowTitle("SupportUdpServer");
-    udpSock = new QUdpSocket(this);
-    pTimer = new QTimer(this);
+    m_udpSock = new QUdpSocket(this);
+    m_pTimer = new QTimer(this);
     QTime midnight(0,0,0);
     qsrand(midnight.secsTo(QTime::currentTime()));
 
     connect(ui->chbAutoSend, SIGNAL(clicked(bool)), SLOT(slotSendDatagramAuto()));
     connect(ui->btnSend, SIGNAL(clicked(bool)), SLOT(slotSendDatagram()));
-    connect(pTimer, SIGNAL(timeout()), SLOT(slotSendDatagram()));
+    connect(m_pTimer, SIGNAL(timeout()), SLOT(slotSendDatagram()));
 }
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ void FrmMain::slotSendDatagram()
         generatePhone();
     }
     out << ui->edtPhone->text();
-    udpSock->writeDatagram(baDatagram, QHostAddress(ui->edtIP->text()), ui->edtUdpPort->text().toInt());
+    m_udpSock->writeDatagram(baDatagram, QHostAddress(ui->edtIP->text()), ui->edtUdpPort->text().toInt());
 }
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -38,12 +38,12 @@ void FrmMain::slotSendDatagramAuto()
     if (ui->chbAutoSend->isChecked()) {
         ui->btnSend->setEnabled(false);
         ui->edtPhone->setReadOnly(true);
-        pTimer->setInterval(ui->edtInterval->text().toInt());
-        pTimer->start();
+        m_pTimer->setInterval(ui->edtInterval->text().toInt());
+        m_pTimer->start();
     } else {
         ui->btnSend->setEnabled(true);
         ui->edtPhone->setReadOnly(false);
-        pTimer->stop();
+        m_pTimer->stop();
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
