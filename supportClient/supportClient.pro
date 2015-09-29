@@ -11,7 +11,7 @@ QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = support
+TARGET = supportClient
 TEMPLATE = app
 
 
@@ -30,6 +30,6 @@ FORMS    += \
     frmAbout.ui \
     frmLogin.ui
 RESOURCES += \
-    res.qrc
+    supportClient.qrc
 
-RC_FILE = support.rc
+RC_FILE = supportClient.rc
