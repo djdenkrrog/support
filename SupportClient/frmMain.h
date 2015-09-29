@@ -13,12 +13,7 @@
 #include <QUdpSocket>
 #include <QKeyEvent>
 
-struct TuserInfo{
-    QString user;
-    QString name1;
-    QString name2;
-    QString name3;
-};
+
 
 namespace Ui {
 class FrmMain;
@@ -33,25 +28,33 @@ public:
     ~FrmMain();
 
     void initDB(QString dbName);
-    TuserInfo userInfo;
+    void setUserInfo(QString user, QString name1, QString name2, QString name3);
 
 protected:
     bool event(QEvent *p_event);
     void keyPressEvent(QKeyEvent* evnt);
 
 private:
+    struct UserInfo{
+        QString user;
+        QString name1;
+        QString name2;
+        QString name3;
+    };
+
     Ui::FrmMain *ui;
+    UserInfo m_userInfo;
 
     /*Network*/
-    QUdpSocket* udpSock;
+    QUdpSocket* m_udpSock;
 
     /*DB*/
-    QTableWidget *tableWidget;
-    QVBoxLayout *vlayout;
-    QSqlQueryModel *model;
-    QStandardItemModel *modelExtInfo ;
+    QTableWidget *m_tableWidget;
+    QVBoxLayout *m_vLayout;
+    QSqlQueryModel *m_model;
+    QStandardItemModel *m_modelExtInfo ;
 
-    QSqlDatabase db;
+    QSqlDatabase m_db;
 
     void refreshTable();
 

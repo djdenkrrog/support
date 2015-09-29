@@ -17,17 +17,17 @@ FrmMain::FrmMain(QWidget *parent) :
 
     this->setWindowOpacity(0);
 
-    model = new QSqlQueryModel();
-    ui->tblGridHistory->setModel(model);
+    m_model = new QSqlQueryModel();
+    ui->tblGridHistory->setModel(m_model);
 
-    ui->btnCallAdd->setIcon(QIcon(":/images/arrowright.png"));
-    ui->btnClose->setIcon(QIcon(":/images/exit.png"));
-    ui->actionClose->setIcon(QIcon(":/images/exit.png"));
-    ui->btnCallSave->setIcon(QIcon(":/images/add.png"));
-    ui->actionAbout->setIcon(QIcon(":/images/about.png"));
-    ui->actionSaveToXML->setIcon(QIcon(":/images/xml_import.png"));
-    ui->actionLoadFromXML->setIcon(QIcon(":/images/xml_export.png"));
-    ui->btnMoveItem->setIcon(QIcon(":/images/arrowright.png"));
+    ui->btnCallAdd->setIcon(QIcon(QStringLiteral(":/images/arrowright.png")));
+    ui->btnClose->setIcon(QIcon(QStringLiteral(":/images/exit.png")));
+    ui->actionClose->setIcon(QIcon(QStringLiteral(":/images/exit.png")));
+    ui->btnCallSave->setIcon(QIcon(QStringLiteral(":/images/add.png")));
+    ui->actionAbout->setIcon(QIcon(QStringLiteral(":/images/about.png")));
+    ui->actionSaveToXML->setIcon(QIcon(QStringLiteral(":/images/xml_import.png")));
+    ui->actionLoadFromXML->setIcon(QIcon(QStringLiteral(":/images/xml_export.png")));
+    ui->btnMoveItem->setIcon(QIcon(QStringLiteral(":/images/arrowright.png")));
 
 
     connect(ui->edtInsertCallPhone, SIGNAL(textChanged(QString)), SLOT(changedInsertCall()));
@@ -42,48 +42,61 @@ FrmMain::FrmMain(QWidget *parent) :
     connect(ui->tblGridHistory, SIGNAL(doubleClicked(QModelIndex)), SLOT(moveItem()));
     connect(ui->tblGridHistory->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), SLOT(selectionChanged()));
 
-    udpSock = new QUdpSocket(this);
-    udpSock->bind(8091);
-    connect(udpSock, SIGNAL(readyRead()), SLOT(processDatagrams()));
+    m_udpSock = new QUdpSocket(this);
+    m_udpSock->bind(8091);
+    connect(m_udpSock, SIGNAL(readyRead()), SLOT(processDatagrams()));
 
-    modelExtInfo = new QStandardItemModel;
+    m_modelExtInfo = new QStandardItemModel;
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::initDB(QString dbName)
 {
-    db = QSqlDatabase::database();
-    db.setDatabaseName(dbName);
-    if (!db.open()) {
-         QMessageBox::warning(this, tr("Error opening DB!"), db.lastError().driverText());
+    m_db = QSqlDatabase::database();
+    m_db.setDatabaseName(dbName);
+    if (!m_db.open()) {
+         QMessageBox::warning(this, tr("Error opening DB!"), m_db.lastError().driverText());
      } else {
          refreshTable();
-     }
+    }
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+void FrmMain::setUserInfo(QString user, QString name1, QString name2, QString name3)
+{
+    m_userInfo.user = user;
+    m_userInfo.name1 = name1;
+    m_userInfo.name2 = name2;
+    m_userInfo.name3 = name3;
+
+}
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::refreshTable()
 {
     QSqlQuery query;
 
     if (ui->edtInsertCallPhone->text() != "") {
-        query.prepare("select name, phone, call_d_begin, question, answer, user_r, name1, name2, name3 from v_calls where user_r=:user and phone like :phone;");
-        query.bindValue(":user", userInfo.user);
-        query.bindValue(":phone", ui->edtInsertCallPhone->text() + '%');
+        query.prepare(QStringLiteral("select name, phone, call_d_begin, question, answer, user_r, \
+                                     name1, name2, name3 from v_calls where user_r=:user \
+                                     and phone like :phone;"));
+        query.bindValue(QStringLiteral(":user"), m_userInfo.user);
+        query.bindValue(QStringLiteral(":phone"), ui->edtInsertCallPhone->text() + '%');
     } else {
-        query.prepare("select name, phone, call_d_begin, question, answer, user_r, name1, name2, name3 from v_calls where user_r=:user;");
-        query.bindValue(":user", userInfo.user);
+        query.prepare(QStringLiteral("select name, phone, call_d_begin, question, answer, user_r, \
+                                     name1, name2, name3 from v_calls where user_r=:user;"));
+        query.bindValue(QStringLiteral(":user"), m_userInfo.user);
     }
 
     if (query.exec()) {
-        model->setQuery(query);
-        model->setHeaderData(0, Qt::Horizontal, tr("Full name"));
-        model->setHeaderData(1, Qt::Horizontal, tr("Phone"));
-        model->setHeaderData(2, Qt::Horizontal, tr("Date"));
+        m_model->setQuery(query);
+        m_model->setHeaderData(0, Qt::Horizontal, tr("Full name"));
+        m_model->setHeaderData(1, Qt::Horizontal, tr("Phone"));
+        m_model->setHeaderData(2, Qt::Horizontal, tr("Date"));
 
-        if (model->lastError().isValid()) {
-            qDebug() << model->lastError();
-            QMessageBox::warning(this, tr("Error data model!"), model->lastError().driverText());
+        if (m_model->lastError().isValid()) {
+            qDebug() << m_model->lastError();
+            QMessageBox::warning(this, tr("Error data model!"), m_model->lastError().driverText());
         }
 
         ui->tblGridHistory->resizeRowsToContents();        
@@ -101,40 +114,44 @@ void FrmMain::refreshTable()
     }
 
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::callAdd()
 {
-    if (ui->edtInsertCallPhone->text() == "") {
+    if (ui->edtInsertCallPhone->text().isEmpty()) {
         QMessageBox::warning(this, tr("Error!"), tr("No phone number of incoming call."));
     } else {
         ui->edtPhone->setText(ui->edtInsertCallPhone->text());
-        ui->edtDBegin->setText(QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss"));
+        ui->edtDBegin->setText(QDateTime::currentDateTime().toString(
+                                   QStringLiteral("dd.MM.yyyy HH:mm:ss")));
         ui->edtInsertCallPhone->clear();
         ui->btnCallAdd->setEnabled(false);
         ui->btnCallSave->setEnabled(true);
     }
 
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::callSave()
 {
-    if (ui->edtPhone->text() == "") {
-        QMessageBox::warning(this, tr("Error!"), tr("No phone number of incoming call. Saving is not possible"));
+    if (ui->edtPhone->text().isEmpty()) {
+        QMessageBox::warning(this, tr("Error!"),
+                             tr("No phone number of incoming call. Saving is not possible"));
         return;
     }
     QSqlQuery query;
-    query.prepare("INSERT INTO calls VALUES (:user, :name1 , :name2, :name3, :phone, :question, :answer, :call_d_begin, :call_d_end);");
-    query.bindValue(":user", userInfo.user);
-    query.bindValue(":name1", ui->edtName1->text());
-    query.bindValue(":name2", ui->edtName2->text());
-    query.bindValue(":name3", ui->edtName3->text());
-    query.bindValue(":phone", ui->edtPhone->text());
-    query.bindValue(":question", ui->tedtQuestion->toPlainText());
-    query.bindValue(":answer", ui->tedtAnswer->toPlainText());
-    query.bindValue(":call_d_begin", ui->edtDBegin->text());
-    query.bindValue(":call_d_end", QDateTime::currentDateTime().toString("dd.MM.yyyy HH:mm:ss"));
+    query.prepare(QStringLiteral("INSERT INTO calls VALUES (:user, :name1 , :name2, :name3, \
+                                  :phone, :question, :answer, :call_d_begin, :call_d_end);"));
+    query.bindValue(QStringLiteral(":user"), m_userInfo.user);
+    query.bindValue(QStringLiteral(":name1"), ui->edtName1->text());
+    query.bindValue(QStringLiteral(":name2"), ui->edtName2->text());
+    query.bindValue(QStringLiteral(":name3"), ui->edtName3->text());
+    query.bindValue(QStringLiteral(":phone"), ui->edtPhone->text());
+    query.bindValue(QStringLiteral(":question"), ui->tedtQuestion->toPlainText());
+    query.bindValue(QStringLiteral(":answer"), ui->tedtAnswer->toPlainText());
+    query.bindValue(QStringLiteral(":call_d_begin"), ui->edtDBegin->text());
+    query.bindValue(QStringLiteral(":call_d_end"),
+                    QDateTime::currentDateTime().toString(QStringLiteral("dd.MM.yyyy HH:mm:ss")));
 
     if (query.exec()) {
         ui->edtPhone->clear();
@@ -150,10 +167,11 @@ void FrmMain::callSave()
 
         refreshTable();
     } else {
-         QMessageBox::warning(this, tr("Error!"), tr("Error execution sql query!") + "\n" + query.lastError().driverText());
+         QMessageBox::warning(this, tr("Error!"), tr("Error execution sql query!") + "\n"
+                              + query.lastError().driverText());
     }
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::moveItem()
 {
@@ -161,12 +179,12 @@ void FrmMain::moveItem()
     if (select->hasSelection()) {
         int rowIdx = select->currentIndex().row();
 
-        ui->edtName1->setText(model->record(rowIdx).value("name1").toString());
-        ui->edtName2->setText(model->record(rowIdx).value("name2").toString());
-        ui->edtName3->setText(model->record(rowIdx).value("name3").toString());
+        ui->edtName1->setText(m_model->record(rowIdx).value(QStringLiteral("name1")).toString());
+        ui->edtName2->setText(m_model->record(rowIdx).value(QStringLiteral("name2")).toString());
+        ui->edtName3->setText(m_model->record(rowIdx).value(QStringLiteral("name3")).toString());
     }
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 
 void FrmMain::selectionChanged()
@@ -179,36 +197,39 @@ void FrmMain::selectionChanged()
         QStandardItem *itemAnswer;
         QStringList horizontalHeader;
 
-        modelExtInfo->clear();
+        m_modelExtInfo->clear();
 
-        itemQuestion = new QStandardItem(QString(model->record(rowIdx).value("question").toString()));
-        itemAnswer = new QStandardItem(QString(model->record(rowIdx).value("answer").toString()));
-        modelExtInfo->setItem(0, 0, itemQuestion);
-        modelExtInfo->setItem(0, 1, itemAnswer);
+        itemQuestion = new QStandardItem(QString(m_model->record(rowIdx).
+                                                 value(QStringLiteral("question")).toString()));
+        itemAnswer = new QStandardItem(QString(m_model->record(rowIdx).
+                                               value(QStringLiteral("answer")).toString()));
+        m_modelExtInfo->setItem(0, 0, itemQuestion);
+        m_modelExtInfo->setItem(0, 1, itemAnswer);
 
         horizontalHeader.append(tr("Question"));
         horizontalHeader.append(tr("Answer"));
-        modelExtInfo->setHorizontalHeaderLabels(horizontalHeader);
+        m_modelExtInfo->setHorizontalHeaderLabels(horizontalHeader);
 
-        ui->tblExtendedInfo->setModel(modelExtInfo);
+        ui->tblExtendedInfo->setModel(m_modelExtInfo);
         ui->tblExtendedInfo->setColumnWidth(0, 190);
         ui->tblExtendedInfo->setColumnWidth(1, 190);
     }
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::changedInsertCall()
 {
     refreshTable();
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::loadFromXML()
 {
     QString fileName;
 
-    fileName = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::currentPath(),tr("XML (*.xml)"));
-    if (fileName != "") {
+    fileName = QFileDialog::getOpenFileName(this, tr("Open file"),
+                                            QDir::currentPath(),tr("XML (*.xml)"));
+    if (!fileName.isEmpty()) {
         QDomDocument domDoc;
         QFile file(fileName);
 
@@ -222,7 +243,7 @@ void FrmMain::loadFromXML()
         }
     }
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::eachNode(const QDomNode& node)
 {
@@ -231,7 +252,7 @@ void FrmMain::eachNode(const QDomNode& node)
        if(domNode.isElement()) {
           QDomElement domElement = domNode.toElement();
           if(!domElement.isNull()) {
-              if(domElement.tagName() == "callInfo") {
+              if(domElement.tagName() == QLatin1String("callInfo")) {
                   addItemToDB(domElement);
               }
           }
@@ -240,7 +261,7 @@ void FrmMain::eachNode(const QDomNode& node)
        domNode = domNode.nextSibling();
     }
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::addItemToDB(const QDomNode& node)
 {
@@ -254,12 +275,12 @@ void FrmMain::addItemToDB(const QDomNode& node)
         if(domNode.isElement()) {
            QDomElement domElement = domNode.toElement();
            if(!domElement.isNull()) {
-                if (fields != "") {
-                    fields += "," + domElement.tagName();
-                    values += ",'" + domElement.text() + "'";
+                if (!fields.isEmpty()) {
+                    fields += QStringLiteral(",") + domElement.tagName();
+                    values += QStringLiteral(",'") + domElement.text() + QStringLiteral("'");
                 } else {
                     fields = domElement.tagName();
-                    values = "'" + domElement.text() + "'";
+                    values = QStringLiteral("'") + domElement.text() + QStringLiteral("'");
                 }
            }
         }
@@ -267,21 +288,24 @@ void FrmMain::addItemToDB(const QDomNode& node)
         domNode = domNode.nextSibling();
     }
 
-    sqlTxt = "insert into calls (" + fields + ") values (" + values + ");";
+    sqlTxt = QStringLiteral("insert into calls (") + fields + QStringLiteral(") values (")
+            + values + QStringLiteral(");");
     query.prepare(sqlTxt);
     if (!query.exec()) {
-        QMessageBox::warning(this, tr("Error!"), tr("SQL: ") + sqlTxt + "\nDB_Error: " + db.lastError().driverText());
+        QMessageBox::warning(this, tr("Error!"), tr("SQL: ") + sqlTxt + tr("\nDB_Error: ")
+                             + m_db.lastError().driverText());
     }
     refreshTable();
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::saveToXML()
 {
     QString fileName;
 
-    fileName = QFileDialog::getSaveFileName(this, tr("Save file"), QDir::currentPath(), tr("XML (*.xml)"));
-    if (fileName != "") {
+    fileName = QFileDialog::getSaveFileName(this, tr("Save file"), QDir::currentPath(),
+                                            tr("XML (*.xml)"));
+    if (!fileName.isEmpty()) {
         QDomDocument resultXML = xmlCreate();
 
         QFile file(fileName);
@@ -292,29 +316,29 @@ void FrmMain::saveToXML()
         }
     }
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 QDomDocument FrmMain::xmlCreate()
 {
-    QDomDocument doc("support");
-    QDomElement  domElement = doc.createElement("calls");
+    QDomDocument doc(QStringLiteral("support"));
+    QDomElement  domElement = doc.createElement(QStringLiteral("calls"));
     QSqlQuery query;
 
     doc.appendChild(domElement);
 
-    if (query.exec("select * from calls;")) {
+    if (query.exec(QStringLiteral("select * from calls;"))) {
         while (query.next()) {
             QDomElement itemCall = xmlCreateItemCall(
                         doc,
-                        query.value("user_r").toString(),
-                        query.value("name1").toString(),
-                        query.value("name2").toString(),
-                        query.value("name3").toString(),
-                        query.value("phone").toString(),
-                        query.value("question").toString(),
-                        query.value("answer").toString(),
-                        query.value("call_d_begin").toString(),
-                        query.value("call_d_end").toString()
+                        query.value(QStringLiteral("user_r")).toString(),
+                        query.value(QStringLiteral("name1")).toString(),
+                        query.value(QStringLiteral("name2")).toString(),
+                        query.value(QStringLiteral("name3")).toString(),
+                        query.value(QStringLiteral("phone")).toString(),
+                        query.value(QStringLiteral("question")).toString(),
+                        query.value(QStringLiteral("answer")).toString(),
+                        query.value(QStringLiteral("call_d_begin")).toString(),
+                        query.value(QStringLiteral("call_d_end")).toString()
                         );
             domElement.appendChild(itemCall);
         }
@@ -322,7 +346,7 @@ QDomDocument FrmMain::xmlCreate()
 
     return doc;
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 QDomElement FrmMain::xmlCreateItemCall(
         QDomDocument& domDoc,
@@ -341,21 +365,22 @@ QDomElement FrmMain::xmlCreateItemCall(
 
     QDomElement domElement = xmlMakeElement(domDoc, "callInfo", QString().setNum(nNumber));
 
-    domElement.appendChild(xmlMakeElement(domDoc, "user_r", "", strUser));
-    domElement.appendChild(xmlMakeElement(domDoc, "name1", "", strName1));
-    domElement.appendChild(xmlMakeElement(domDoc, "name2", "", strName2));
-    domElement.appendChild(xmlMakeElement(domDoc, "name3", "", strName3));
-    domElement.appendChild(xmlMakeElement(domDoc, "phone", "", strPhone));
-    domElement.appendChild(xmlMakeElement(domDoc, "question", "", strQuestion));
-    domElement.appendChild(xmlMakeElement(domDoc, "answer", "", strAnswer));
-    domElement.appendChild(xmlMakeElement(domDoc, "call_d_begin", "", strCallDBegin));
-    domElement.appendChild(xmlMakeElement(domDoc, "call_d_end", "", strCallDEnd));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("user_r"), "", strUser));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("name1"), "", strName1));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("name2"), "", strName2));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("name3"), "", strName3));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("phone"), "", strPhone));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("question"), "", strQuestion));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("answer"), "", strAnswer));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("call_d_begin"), "",
+                                          strCallDBegin));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("call_d_end"), "", strCallDEnd));
 
     nNumber++;
 
     return domElement;
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 QDomElement FrmMain::xmlMakeElement(
          QDomDocument& domDoc,
@@ -367,7 +392,7 @@ QDomElement FrmMain::xmlMakeElement(
     QDomElement domElement = domDoc.createElement(strName);
 
     if (!strAttr.isEmpty()) {
-        QDomAttr domAttr = domDoc.createAttribute("number");
+        QDomAttr domAttr = domDoc.createAttribute(QStringLiteral("number"));
         domAttr.setValue(strAttr);
         domElement.setAttributeNode(domAttr);
     }
@@ -378,16 +403,16 @@ QDomElement FrmMain::xmlMakeElement(
     }
     return domElement;
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::processDatagrams()
 {
     QByteArray baDatagram;
 
     do {
-        baDatagram.resize(udpSock->pendingDatagramSize());
-        udpSock->readDatagram(baDatagram.data(), baDatagram.size());
-    } while(udpSock->hasPendingDatagrams());
+        baDatagram.resize(m_udpSock->pendingDatagramSize());
+        m_udpSock->readDatagram(baDatagram.data(), baDatagram.size());
+    } while(m_udpSock->hasPendingDatagrams());
 
     QString callPhone;
     QDataStream dataStream(&baDatagram, QIODevice::ReadOnly);
@@ -397,7 +422,7 @@ void FrmMain::processDatagrams()
 
     ui->edtInsertCallPhone->setText(callPhone);
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::aboutShow()
 {
@@ -406,7 +431,7 @@ void FrmMain::aboutShow()
     fAbout = new FrmAbout();
     fAbout->show();
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::keyPressEvent(QKeyEvent* evnt)
 {
@@ -421,12 +446,13 @@ void FrmMain::keyPressEvent(QKeyEvent* evnt)
         }
     }
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 bool FrmMain::event(QEvent *p_event)
 {
     if( p_event->type() == QEvent::ShowToParent) {
-           setWindowTitle(windowTitle() + QString(" - %1 %2 %3").arg(userInfo.name1).arg(userInfo.name2).arg(userInfo.name3));
+           setWindowTitle(windowTitle() + QString(QStringLiteral(" - %1 %2 %3"))
+                          .arg(m_userInfo.name1).arg(m_userInfo.name2).arg(m_userInfo.name3));
            QPropertyAnimation *animation = new QPropertyAnimation(this, "windowOpacity");
            animation->setDuration(1000);
            animation->setEasingCurve(QEasingCurve::Linear);
@@ -436,16 +462,16 @@ bool FrmMain::event(QEvent *p_event)
     }
     return QWidget::event(p_event);
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::appClose()
 {
     close();
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 FrmMain::~FrmMain()
 {
     delete ui;
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------

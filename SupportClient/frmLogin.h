@@ -18,15 +18,17 @@ public:
     explicit FrmLogin(QWidget *parent = 0, FrmMain *pFromMain = 0);
     ~FrmLogin();
 
-    QString dbName;
-
+    void setDbName(QString);
+    QString dbName();
 
 private:
     Ui::FrmLogin *ui;
-    QSqlDatabase db;
-    QList<QWidget *> listElements;
+    QSqlDatabase m_db;
+    QList<QWidget *> m_listElements;
 
-     FrmMain *fMain;
+    FrmMain *m_fMain;
+
+    QString m_dbName;
 
     bool checkLogin();
     void animationForm();

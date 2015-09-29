@@ -13,55 +13,58 @@ FrmLogin::FrmLogin(QWidget *parent, FrmMain *pFromMain) :
 {
     ui->setupUi(this);
 
-    ui->btnEnter->setIcon(QIcon(":/images/confirm.png"));
-    ui->btnCancel->setIcon(QIcon(":/images/cancel.png"));
+    ui->btnEnter->setIcon(QIcon(QStringLiteral(":/images/confirm.png")));
+    ui->btnCancel->setIcon(QIcon(QStringLiteral(":/images/cancel.png")));
     ui->edtPassword->setEchoMode(QLineEdit::Password);
 
     connect(ui->btnCancel, SIGNAL(clicked(bool)), SLOT(frmClose()));
     connect(ui->btnEnter, SIGNAL(clicked(bool)), SLOT(frmEnter()));
 
-    listElements.append(ui->lblUserName);
-    listElements.append(ui->edtLogin);
-    listElements.append(ui->lblUserPassword);
-    listElements.append(ui->edtPassword);
-    listElements.append(ui->lblImg);
-    listElements.append(ui->btnCancel);
+    m_listElements.append(ui->lblUserName);
+    m_listElements.append(ui->edtLogin);
+    m_listElements.append(ui->lblUserPassword);
+    m_listElements.append(ui->edtPassword);
+    m_listElements.append(ui->lblImg);
+    m_listElements.append(ui->btnCancel);
 
-    fMain = pFromMain;
+    m_fMain = pFromMain;
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmLogin::frmEnter()
 {
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(dbName);
-    if (!db.open()) {
-        QMessageBox::warning( 0 , tr("Error opening DB!"), db.lastError().databaseText());
+    m_db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"));
+    m_db.setDatabaseName(m_dbName);
+    if (!m_db.open()) {
+        QMessageBox::warning(this, tr("Error opening DB!"), m_db.lastError().databaseText());
     }
 
-    if (checkLogin())
-    {
+    if (checkLogin()) {
         QSqlQuery query;
 
-        query.prepare("select user_, name1, name2, name3 from users where user_=:user and passw=:passw;");
-        query.bindValue(":user", ui->edtLogin->text());
-        query.bindValue(":passw", ui->edtPassword->text());
+        query.prepare(QStringLiteral("select user_, name1, name2, name3 from users \
+                                     where user_=:user and passw=:passw;"));
+        query.bindValue(QStringLiteral(":user"), ui->edtLogin->text());
+        query.bindValue(QStringLiteral(":passw"), ui->edtPassword->text());
 
         if (query.exec()) {
             query.next();
             QSqlRecord rec = query.record();
-            fMain->userInfo.user = query.value(rec.indexOf("user_")).toString();
-            fMain->userInfo.name1 = query.value(rec.indexOf("name1")).toString();
-            fMain->userInfo.name2 = query.value(rec.indexOf("name2")).toString();
-            fMain->userInfo.name3 = query.value(rec.indexOf("name3")).toString();
+            m_fMain->setUserInfo(query.value(rec.indexOf(QStringLiteral("user_"))).toString(),
+                               query.value(rec.indexOf(QStringLiteral("name1"))).toString(),
+                               query.value(rec.indexOf(QStringLiteral("name2"))).toString(),
+                               query.value(rec.indexOf(QStringLiteral("name3"))).toString()
+                               );
         } else {
-            QMessageBox::warning( 0 , tr("Error execution sql query!"), query.lastError().driverText());
+            QMessageBox::warning(this, tr("Error execution sql query!"),
+                                 query.lastError().driverText());
         }
 
+        m_db.close();
         animationForm();
     }
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 bool FrmLogin::checkLogin()
 {
@@ -69,14 +72,15 @@ bool FrmLogin::checkLogin()
     bool result = false;
 
     QSqlQuery query;
-    query.prepare("select count(user_) as cnt from users where user_=:user and passw=:passw;");
-    query.bindValue(":user", ui->edtLogin->text());
-    query.bindValue(":passw", ui->edtPassword->text());
+    query.prepare(QStringLiteral("select count(user_) as cnt from users \
+                                 where user_=:user and passw=:passw;"));
+    query.bindValue(QStringLiteral(":user"), ui->edtLogin->text());
+    query.bindValue(QStringLiteral(":passw"), ui->edtPassword->text());
 
     if (query.exec()) {
         query.next();
         QSqlRecord rec = query.record();
-        int qSize = query.value(rec.indexOf("cnt")).toInt();
+        int qSize = query.value(rec.indexOf(QStringLiteral("cnt"))).toInt();
         if (qSize > 0) {
            result = true;
         }
@@ -84,25 +88,31 @@ bool FrmLogin::checkLogin()
         if (countTry == 3 && !result) {
             close();
         } else if (!result) {
-            QMessageBox::warning( 0 , tr("Failed password entry!"), QString(tr("Incorrect login or password. \nAttempts remaining: %1")).arg((3 - countTry)));
+            QMessageBox::warning(this, tr("Failed password entry!"),
+                                 QString(tr("Incorrect login or password. \
+                                            \nAttempts remaining: %1")).arg((3 - countTry)));
         }
     } else {
-        QMessageBox::warning( 0 , tr("Error execution sql query!"), query.lastError().driverText());
+        QMessageBox::warning(this, tr("Error execution sql query!"),
+                             query.lastError().driverText());
     }
 
     return result;
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmLogin::animationForm()
 {
-    int countElements = listElements.size();
+    int countElements = m_listElements.size();
     this->setMinimumSize(0,0);
     for (int i = 0; i < countElements; ++i) {
-        QPropertyAnimation *animation = new QPropertyAnimation(listElements.at(i), "geometry");
+        QPropertyAnimation *animation = new QPropertyAnimation(m_listElements.at(i), "geometry");
         animation->setDuration(1500);
         animation->setEasingCurve(QEasingCurve::Linear);
-        animation->setEndValue(QRect(ui->btnEnter->geometry().x() + ui->btnEnter->geometry().width() / 2, ui->btnEnter->geometry().y() + ui->btnEnter->geometry().height() / 2, 0, 0));
+        animation->setEndValue(QRect(ui->btnEnter->geometry().x()
+                                     + ui->btnEnter->geometry().width() / 2,
+                                     ui->btnEnter->geometry().y()
+                                     + ui->btnEnter->geometry().height() / 2, 0, 0));
         animation->start(QAbstractAnimation::DeleteWhenStopped);
     }
 
@@ -115,24 +125,36 @@ void FrmLogin::animationForm()
     connect(animation, SIGNAL(finished()), SLOT(animationFinish()));
 
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmLogin::animationFinish()
 {
     this->accept();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmLogin::frmClose()
 {
     this->reject();
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+
+void FrmLogin::setDbName(QString value)
+{
+    m_dbName = value;
+}
+//--------------------------------------------------------------------------------------------------
+
+QString FrmLogin::dbName()
+{
+    return m_dbName;
+}
+//--------------------------------------------------------------------------------------------------
 
 FrmLogin::~FrmLogin()
 {
-    db.close();
+    m_db.close();
     delete ui;
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------

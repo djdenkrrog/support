@@ -33,3 +33,5 @@ RESOURCES += \
     supportClient.qrc
 
 RC_FILE = supportClient.rc
+
+CONFIG += c++11
