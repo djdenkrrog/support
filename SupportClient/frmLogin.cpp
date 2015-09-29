@@ -7,9 +7,9 @@
 #include <QDebug>
 #include <QPropertyAnimation>
 
-frmLogin::frmLogin(QWidget *parent, frmMain *pFromMain) :
+FrmLogin::FrmLogin(QWidget *parent, FrmMain *pFromMain) :
     QDialog(parent),
-    ui(new Ui::frmLogin)
+    ui(new Ui::FrmLogin)
 {
     ui->setupUi(this);
 
@@ -31,7 +31,7 @@ frmLogin::frmLogin(QWidget *parent, frmMain *pFromMain) :
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmLogin::frmEnter()
+void FrmLogin::frmEnter()
 {
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(dbName);
@@ -63,7 +63,7 @@ void frmLogin::frmEnter()
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-bool frmLogin::checkLogin()
+bool FrmLogin::checkLogin()
 {
     static int countTry = 0;
     bool result = false;
@@ -94,7 +94,7 @@ bool frmLogin::checkLogin()
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmLogin::animationForm()
+void FrmLogin::animationForm()
 {
     int countElements = listElements.size();
     this->setMinimumSize(0,0);
@@ -117,20 +117,20 @@ void frmLogin::animationForm()
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmLogin::animationFinish()
+void FrmLogin::animationFinish()
 {
     this->accept();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmLogin::frmClose()
+void FrmLogin::frmClose()
 {
     this->reject();
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-frmLogin::~frmLogin()
+FrmLogin::~FrmLogin()
 {
     db.close();
     delete ui;

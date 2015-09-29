@@ -7,26 +7,26 @@
 #include <QList>
 
 namespace Ui {
-class frmLogin;
+class FrmLogin;
 }
 
-class frmLogin : public QDialog
+class FrmLogin : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit frmLogin(QWidget *parent = 0, frmMain *pFromMain = 0);
-    ~frmLogin();
+    explicit FrmLogin(QWidget *parent = 0, FrmMain *pFromMain = 0);
+    ~FrmLogin();
 
     QString dbName;
 
 
 private:
-    Ui::frmLogin *ui;
+    Ui::FrmLogin *ui;
     QSqlDatabase db;
     QList<QWidget *> listElements;
 
-     frmMain *fMain;
+     FrmMain *fMain;
 
     bool checkLogin();
     void animationForm();

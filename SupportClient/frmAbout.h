@@ -5,19 +5,19 @@
 #include <QString>
 
 namespace Ui {
-class frmAbout;
+class FrmAbout;
 }
 
-class frmAbout : public QMainWindow
+class FrmAbout : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit frmAbout(QWidget *parent = 0);
-    ~frmAbout();
+    explicit FrmAbout(QWidget *parent = 0);
+    ~FrmAbout();
 
 private:
-    Ui::frmAbout *ui;
+    Ui::FrmAbout *ui;
 };
 
 #endif // FRMABOUT_H

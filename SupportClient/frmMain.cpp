@@ -9,9 +9,9 @@
 #include <QSqlError>
 #include <QDateTime>
 
-frmMain::frmMain(QWidget *parent) :
+FrmMain::FrmMain(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::frmMain)
+    ui(new Ui::FrmMain)
 {
     ui->setupUi(this);
 
@@ -50,7 +50,7 @@ frmMain::frmMain(QWidget *parent) :
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::initDB(QString dbName)
+void FrmMain::initDB(QString dbName)
 {
     db = QSqlDatabase::database();
     db.setDatabaseName(dbName);
@@ -62,7 +62,7 @@ void frmMain::initDB(QString dbName)
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::refreshTable()
+void FrmMain::refreshTable()
 {
     QSqlQuery query;
 
@@ -103,7 +103,7 @@ void frmMain::refreshTable()
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::callAdd()
+void FrmMain::callAdd()
 {
     if (ui->edtInsertCallPhone->text() == "") {
         QMessageBox::warning(this, tr("Error!"), tr("No phone number of incoming call."));
@@ -118,7 +118,7 @@ void frmMain::callAdd()
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::callSave()
+void FrmMain::callSave()
 {
     if (ui->edtPhone->text() == "") {
         QMessageBox::warning(this, tr("Error!"), tr("No phone number of incoming call. Saving is not possible"));
@@ -155,7 +155,7 @@ void frmMain::callSave()
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::moveItem()
+void FrmMain::moveItem()
 {
     QItemSelectionModel *select = ui->tblGridHistory->selectionModel();
     if (select->hasSelection()) {
@@ -169,7 +169,7 @@ void frmMain::moveItem()
 //----------------------------------------------------------------------------------------------------------------------
 
 
-void frmMain::selectionChanged()
+void FrmMain::selectionChanged()
 {
     QItemSelectionModel *select = ui->tblGridHistory->selectionModel();
     if (select->hasSelection()) {
@@ -197,13 +197,13 @@ void frmMain::selectionChanged()
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::changedInsertCall()
+void FrmMain::changedInsertCall()
 {
     refreshTable();
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::loadFromXML()
+void FrmMain::loadFromXML()
 {
     QString fileName;
 
@@ -224,7 +224,7 @@ void frmMain::loadFromXML()
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::eachNode(const QDomNode& node)
+void FrmMain::eachNode(const QDomNode& node)
 {
    QDomNode domNode = node.firstChild();
    while(!domNode.isNull()) {
@@ -242,7 +242,7 @@ void frmMain::eachNode(const QDomNode& node)
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::addItemToDB(const QDomNode& node)
+void FrmMain::addItemToDB(const QDomNode& node)
 {
     QString fields;
     QString values;
@@ -276,7 +276,7 @@ void frmMain::addItemToDB(const QDomNode& node)
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::saveToXML()
+void FrmMain::saveToXML()
 {
     QString fileName;
 
@@ -294,7 +294,7 @@ void frmMain::saveToXML()
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-QDomDocument frmMain::xmlCreate()
+QDomDocument FrmMain::xmlCreate()
 {
     QDomDocument doc("support");
     QDomElement  domElement = doc.createElement("calls");
@@ -324,7 +324,7 @@ QDomDocument frmMain::xmlCreate()
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-QDomElement frmMain::xmlCreateItemCall(
+QDomElement FrmMain::xmlCreateItemCall(
         QDomDocument& domDoc,
         const QString& strUser,
         const QString& strName1,
@@ -357,7 +357,7 @@ QDomElement frmMain::xmlCreateItemCall(
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-QDomElement frmMain::xmlMakeElement(
+QDomElement FrmMain::xmlMakeElement(
          QDomDocument& domDoc,
          const QString& strName,
          const QString& strAttr,
@@ -380,7 +380,7 @@ QDomElement frmMain::xmlMakeElement(
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::processDatagrams()
+void FrmMain::processDatagrams()
 {
     QByteArray baDatagram;
 
@@ -399,16 +399,16 @@ void frmMain::processDatagrams()
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::aboutShow()
+void FrmMain::aboutShow()
 {
-    frmAbout *fAbout;
+    FrmAbout *fAbout;
 
-    fAbout = new frmAbout();
+    fAbout = new FrmAbout();
     fAbout->show();
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::keyPressEvent(QKeyEvent* evnt)
+void FrmMain::keyPressEvent(QKeyEvent* evnt)
 {
     if (evnt->modifiers()==Qt::CTRL) {
         switch (evnt->key()) {
@@ -423,7 +423,7 @@ void frmMain::keyPressEvent(QKeyEvent* evnt)
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-bool frmMain::event(QEvent *p_event)
+bool FrmMain::event(QEvent *p_event)
 {
     if( p_event->type() == QEvent::ShowToParent) {
            setWindowTitle(windowTitle() + QString(" - %1 %2 %3").arg(userInfo.name1).arg(userInfo.name2).arg(userInfo.name3));
@@ -438,13 +438,13 @@ bool frmMain::event(QEvent *p_event)
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-void frmMain::appClose()
+void FrmMain::appClose()
 {
     close();
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-frmMain::~frmMain()
+FrmMain::~FrmMain()
 {
     delete ui;
 }

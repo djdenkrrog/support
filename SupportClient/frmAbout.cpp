@@ -5,9 +5,9 @@
 #include <QImage>
 #include <QPixmap>
 
-frmAbout::frmAbout(QWidget *parent) :
+FrmAbout::FrmAbout(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::frmAbout)
+    ui(new Ui::FrmAbout)
 {
     QString nameProg;
     QString note;
@@ -35,7 +35,7 @@ frmAbout::frmAbout(QWidget *parent) :
 }
 //----------------------------------------------------------------------------------------------------------------------
 
-frmAbout::~frmAbout()
+FrmAbout::~FrmAbout()
 {
     delete ui;
 }

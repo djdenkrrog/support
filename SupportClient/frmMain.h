@@ -13,7 +13,6 @@
 #include <QUdpSocket>
 #include <QKeyEvent>
 
-//Флаги состояния
 struct TuserInfo{
     QString user;
     QString name1;
@@ -22,16 +21,16 @@ struct TuserInfo{
 };
 
 namespace Ui {
-class frmMain;
+class FrmMain;
 }
 
-class frmMain : public QMainWindow
+class FrmMain : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit frmMain(QWidget *parent = 0);
-    ~frmMain();
+    explicit FrmMain(QWidget *parent = 0);
+    ~FrmMain();
 
     void initDB(QString dbName);
     TuserInfo userInfo;
@@ -41,7 +40,7 @@ protected:
     void keyPressEvent(QKeyEvent* evnt);
 
 private:
-    Ui::frmMain *ui;
+    Ui::FrmMain *ui;
 
     /*Network*/
     QUdpSocket* udpSock;

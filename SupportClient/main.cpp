@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     QTextCodec *codec = QTextCodec::codecForName("UTF8");
     QTextCodec::setCodecForLocale(codec);
 
-    frmMain fMain;
+    FrmMain fMain;
 
     QString dbName = QApplication::applicationDirPath() + "/db/support.db";
     if (!QFileInfo::exists(dbName)) {
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    frmLogin *fLogin = new frmLogin(0, &fMain);
+    FrmLogin *fLogin = new FrmLogin(0, &fMain);
     fLogin->dbName = dbName;
     if (!fLogin->exec()) {
         return 0;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>frmLogin</class>
- <widget class="QDialog" name="frmLogin">
+ <class>FrmLogin</class>
+ <widget class="QDialog" name="FrmLogin">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -54,7 +54,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="res.qrc">:/images/lock.png</pixmap>
+    <pixmap resource="supportClient.qrc">:/images/lock.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -169,7 +169,7 @@
   <tabstop>btnCancel</tabstop>
  </tabstops>
  <resources>
-  <include location="res.qrc"/>
+  <include location="supportClient.qrc"/>
  </resources>
  <connections/>
 </ui>
