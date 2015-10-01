@@ -76,7 +76,7 @@ void FrmMain::refreshTable()
 {
     QSqlQuery query;
 
-    if (!ui->edtInsertCallPhone->text().isEmpty) {
+    if (!ui->edtInsertCallPhone->text().isEmpty()) {
         query.prepare(QStringLiteral("select name, phone, call_d_begin, question, answer, user_r, \
                                      name1, name2, name3 from v_calls where user_r=:user \
                                      and phone like :phone;"));
@@ -363,18 +363,20 @@ QDomElement FrmMain::xmlCreateItemCall(
 {
     static int nNumber = 1;
 
-    QDomElement domElement = xmlMakeElement(domDoc, "callInfo", QString().setNum(nNumber));
+    QDomElement domElement = xmlMakeElement(domDoc, "callInfo", QString().number(nNumber));
 
-    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("user_r"), "", strUser));
-    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("name1"), "", strName1));
-    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("name2"), "", strName2));
-    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("name3"), "", strName3));
-    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("phone"), "", strPhone));
-    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("question"), "", strQuestion));
-    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("answer"), "", strAnswer));
-    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("call_d_begin"), "",
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("user_r"), QString(), strUser));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("name1"), QString(), strName1));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("name2"), QString(), strName2));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("name3"), QString(), strName3));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("phone"), QString(), strPhone));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("question"), QString(),
+                                          strQuestion));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("answer"), QString(), strAnswer));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("call_d_begin"), QString(),
                                           strCallDBegin));
-    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("call_d_end"), "", strCallDEnd));
+    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("call_d_end"), QString(),
+                                          strCallDEnd));
 
     nNumber++;
 

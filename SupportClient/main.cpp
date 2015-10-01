@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     }
     if (dbName.isEmpty()) {
         QMessageBox::warning(0, QObject::tr("Error"),
-                             QObject::tr("Without the database, work impossible"));
+                             QObject::tr("Without the database, work impossible."));
         return 0;
     }
 

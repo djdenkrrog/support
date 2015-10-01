@@ -104,7 +104,7 @@ bool FrmLogin::checkLogin()
 void FrmLogin::animationForm()
 {
     int countElements = m_listElements.size();
-    this->setMinimumSize(0,0);
+    this->setMinimumSize(0, 0);
     for (int i = 0; i < countElements; ++i) {
         QPropertyAnimation *animation = new QPropertyAnimation(m_listElements.at(i), "geometry");
         animation->setDuration(1500);
