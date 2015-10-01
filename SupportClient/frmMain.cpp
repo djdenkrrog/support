@@ -419,7 +419,6 @@ void FrmMain::processDatagrams()
     QString callPhone;
     QDataStream dataStream(&baDatagram, QIODevice::ReadOnly);
 
-    dataStream.setVersion(QDataStream::Qt_5_0);
     dataStream >> callPhone;
 
     ui->edtInsertCallPhone->setText(callPhone);
