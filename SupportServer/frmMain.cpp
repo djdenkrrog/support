@@ -10,14 +10,14 @@ FrmMain::FrmMain(QWidget *parent) :
     setWindowTitle("SupportUdpServer");
     m_udpSock = new QUdpSocket(this);
     m_pTimer = new QTimer(this);
-    QTime midnight(0,0,0);
+    QTime midnight(0, 0, 0);
     qsrand(midnight.secsTo(QTime::currentTime()));
 
     connect(ui->chbAutoSend, SIGNAL(clicked(bool)), SLOT(slotSendDatagramAuto()));
     connect(ui->btnSend, SIGNAL(clicked(bool)), SLOT(slotSendDatagram()));
     connect(m_pTimer, SIGNAL(timeout()), SLOT(slotSendDatagram()));
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::slotSendDatagram()
 {
@@ -29,9 +29,10 @@ void FrmMain::slotSendDatagram()
         generatePhone();
     }
     out << ui->edtPhone->text();
-    m_udpSock->writeDatagram(baDatagram, QHostAddress(ui->edtIP->text()), ui->edtUdpPort->text().toInt());
+    m_udpSock->writeDatagram(baDatagram, QHostAddress(ui->edtIP->text()),
+                             ui->edtUdpPort->text().toInt());
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::slotSendDatagramAuto()
 {
@@ -46,19 +47,19 @@ void FrmMain::slotSendDatagramAuto()
         m_pTimer->stop();
     }
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 void FrmMain::generatePhone()
 {
-    ui->edtPhone->setText(QString("%1%2%3%4%5%6%7%8%9%10").arg(qrand()%10).arg(qrand()%10).arg(qrand()%10). \
-                          arg(qrand()%10).arg(qrand()%10).arg(qrand()%10).arg(qrand()%10).arg(qrand()%10). \
-                          arg(qrand()%10).arg(qrand()%10));
+    ui->edtPhone->setText(QString("%1%2%3%4%5%6%7%8%9%10").arg(qrand()%10).arg(qrand()%10). \
+                          arg(qrand()%10).arg(qrand()%10).arg(qrand()%10).arg(qrand()%10). \
+                          arg(qrand()%10).arg(qrand()%10). arg(qrand()%10).arg(qrand()%10));
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
 FrmMain::~FrmMain()
 {
     delete ui;
 }
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
