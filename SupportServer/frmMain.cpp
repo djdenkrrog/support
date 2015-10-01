@@ -24,7 +24,7 @@ void FrmMain::slotSendDatagram()
     qDebug() << "slotSendDatagram";
     QByteArray baDatagram;
     QDataStream out(&baDatagram, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_5_5);
+    out.setVersion(QDataStream::Qt_5_0);
     if (ui->chbAutoSend->isChecked()) {
         generatePhone();
     }
