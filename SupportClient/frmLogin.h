@@ -24,7 +24,6 @@ public:
 private:
     Ui::FrmLogin *ui;
     QSqlDatabase m_db;
-    QList<QWidget *> m_listElements;
 
     FrmMain *m_fMain;
 

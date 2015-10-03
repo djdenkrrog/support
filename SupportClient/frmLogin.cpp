@@ -20,13 +20,6 @@ FrmLogin::FrmLogin(QWidget *parent, FrmMain *pFromMain) :
     connect(ui->btnCancel, SIGNAL(clicked(bool)), SLOT(frmClose()));
     connect(ui->btnEnter, SIGNAL(clicked(bool)), SLOT(frmEnter()));
 
-    m_listElements.append(ui->lblUserName);
-    m_listElements.append(ui->edtLogin);
-    m_listElements.append(ui->lblUserPassword);
-    m_listElements.append(ui->edtPassword);
-    m_listElements.append(ui->lblImg);
-    m_listElements.append(ui->btnCancel);
-
     m_fMain = pFromMain;
 }
 //--------------------------------------------------------------------------------------------------
@@ -103,19 +96,6 @@ bool FrmLogin::checkLogin()
 
 void FrmLogin::animationForm()
 {
-    int countElements = m_listElements.size();
-    this->setMinimumSize(0, 0);
-    for (int i = 0; i < countElements; ++i) {
-        QPropertyAnimation *animation = new QPropertyAnimation(m_listElements.at(i), "geometry");
-        animation->setDuration(1500);
-        animation->setEasingCurve(QEasingCurve::Linear);
-        animation->setEndValue(QRect(ui->btnEnter->geometry().x()
-                                     + ui->btnEnter->geometry().width() / 2,
-                                     ui->btnEnter->geometry().y()
-                                     + ui->btnEnter->geometry().height() / 2, 0, 0));
-        animation->start(QAbstractAnimation::DeleteWhenStopped);
-    }
-
     QPropertyAnimation *animation = new QPropertyAnimation(this, "windowOpacity");
     animation->setDuration(1500);
     animation->setEasingCurve(QEasingCurve::Linear);
