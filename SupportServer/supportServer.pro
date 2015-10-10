@@ -4,6 +4,13 @@
 #
 #-------------------------------------------------
 
+DESTDIR     += build/bin
+MOC_DIR     += build/mocs
+UI_DIR      += build/uis 
+RCC_DIR     += build/rccs
+OBJECTS_DIR += build/objs
+CONFIG      -= debug_and_release debug_and_release_target
+
 QT       += core gui
 QT       += network
 
