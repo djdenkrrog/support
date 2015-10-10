@@ -62,12 +62,11 @@ void FrmMain::initDB(QString dbName)
 }
 //--------------------------------------------------------------------------------------------------
 
-void FrmMain::setUserInfo(QString user, QString name1, QString name2, QString name3)
+void FrmMain::setUserInfo(QString user, QString name1, QString name2)
 {
     m_userInfo.user = user;
     m_userInfo.name1 = name1;
     m_userInfo.name2 = name2;
-    m_userInfo.name3 = name3;
 
 }
 //--------------------------------------------------------------------------------------------------
@@ -78,13 +77,13 @@ void FrmMain::refreshTable()
 
     if (!ui->edtInsertCallPhone->text().isEmpty()) {
         query.prepare(QStringLiteral("select name, phone, call_d_begin, question, answer, user_r, \
-                                     name1, name2, name3 from v_calls where user_r=:user \
+                                     name1, name2 from v_calls where user_r=:user \
                                      and phone like :phone;"));
         query.bindValue(QStringLiteral(":user"), m_userInfo.user);
         query.bindValue(QStringLiteral(":phone"), ui->edtInsertCallPhone->text() + '%');
     } else {
         query.prepare(QStringLiteral("select name, phone, call_d_begin, question, answer, user_r, \
-                                     name1, name2, name3 from v_calls where user_r=:user;"));
+                                     name1, name2 from v_calls where user_r=:user;"));
         query.bindValue(QStringLiteral(":user"), m_userInfo.user);
     }
 
@@ -140,12 +139,11 @@ void FrmMain::callSave()
         return;
     }
     QSqlQuery query;
-    query.prepare(QStringLiteral("INSERT INTO calls VALUES (:user, :name1 , :name2, :name3, \
+    query.prepare(QStringLiteral("INSERT INTO calls VALUES (:user, :name1 , :name2, \
                                   :phone, :question, :answer, :call_d_begin, :call_d_end);"));
     query.bindValue(QStringLiteral(":user"), m_userInfo.user);
     query.bindValue(QStringLiteral(":name1"), ui->edtName1->text());
     query.bindValue(QStringLiteral(":name2"), ui->edtName2->text());
-    query.bindValue(QStringLiteral(":name3"), ui->edtName3->text());
     query.bindValue(QStringLiteral(":phone"), ui->edtPhone->text());
     query.bindValue(QStringLiteral(":question"), ui->tedtQuestion->toPlainText());
     query.bindValue(QStringLiteral(":answer"), ui->tedtAnswer->toPlainText());
@@ -158,7 +156,6 @@ void FrmMain::callSave()
         ui->edtDBegin->clear();
         ui->edtName1->clear();
         ui->edtName2->clear();
-        ui->edtName3->clear();
         ui->tedtQuestion->clear();
         ui->tedtAnswer->clear();
 
@@ -181,7 +178,6 @@ void FrmMain::moveItem()
 
         ui->edtName1->setText(m_model->record(rowIdx).value(QStringLiteral("name1")).toString());
         ui->edtName2->setText(m_model->record(rowIdx).value(QStringLiteral("name2")).toString());
-        ui->edtName3->setText(m_model->record(rowIdx).value(QStringLiteral("name3")).toString());
     }
 }
 //--------------------------------------------------------------------------------------------------
@@ -333,7 +329,6 @@ QDomDocument FrmMain::xmlCreate()
                         query.value(QStringLiteral("user_r")).toString(),
                         query.value(QStringLiteral("name1")).toString(),
                         query.value(QStringLiteral("name2")).toString(),
-                        query.value(QStringLiteral("name3")).toString(),
                         query.value(QStringLiteral("phone")).toString(),
                         query.value(QStringLiteral("question")).toString(),
                         query.value(QStringLiteral("answer")).toString(),
@@ -353,7 +348,6 @@ QDomElement FrmMain::xmlCreateItemCall(
         const QString& strUser,
         const QString& strName1,
         const QString& strName2,
-        const QString& strName3,
         const QString& strPhone,
         const QString& strQuestion,
         const QString& strAnswer,
@@ -368,7 +362,6 @@ QDomElement FrmMain::xmlCreateItemCall(
     domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("user_r"), QString(), strUser));
     domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("name1"), QString(), strName1));
     domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("name2"), QString(), strName2));
-    domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("name3"), QString(), strName3));
     domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("phone"), QString(), strPhone));
     domElement.appendChild(xmlMakeElement(domDoc, QStringLiteral("question"), QString(),
                                           strQuestion));
@@ -452,8 +445,8 @@ void FrmMain::keyPressEvent(QKeyEvent* evnt)
 bool FrmMain::event(QEvent *p_event)
 {
     if( p_event->type() == QEvent::ShowToParent) {
-           setWindowTitle(windowTitle() + QString(QStringLiteral(" - %1 %2 %3"))
-                          .arg(m_userInfo.name1).arg(m_userInfo.name2).arg(m_userInfo.name3));
+           setWindowTitle(windowTitle() + QString(QStringLiteral(" - %1 %2"))
+                          .arg(m_userInfo.name1).arg(m_userInfo.name2));
            QPropertyAnimation *animation = new QPropertyAnimation(this, "windowOpacity");
            animation->setDuration(1000);
            animation->setEasingCurve(QEasingCurve::Linear);

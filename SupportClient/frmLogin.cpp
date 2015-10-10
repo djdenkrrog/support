@@ -26,6 +26,7 @@ FrmLogin::FrmLogin(QWidget *parent, FrmMain *pFromMain) :
 
 void FrmLogin::frmEnter()
 {
+
     m_db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"));
     m_db.setDatabaseName(m_dbName);
     if (!m_db.open()) {
@@ -35,7 +36,7 @@ void FrmLogin::frmEnter()
     if (checkLogin()) {
         QSqlQuery query;
 
-        query.prepare(QStringLiteral("select user_, name1, name2, name3 from users \
+        query.prepare(QStringLiteral("select user_, name1, name2 from users \
                                      where user_=:user and passw=:passw;"));
         query.bindValue(QStringLiteral(":user"), ui->edtLogin->text());
         query.bindValue(QStringLiteral(":passw"), ui->edtPassword->text());
@@ -45,8 +46,7 @@ void FrmLogin::frmEnter()
             QSqlRecord rec = query.record();
             m_fMain->setUserInfo(query.value(rec.indexOf(QStringLiteral("user_"))).toString(),
                                query.value(rec.indexOf(QStringLiteral("name1"))).toString(),
-                               query.value(rec.indexOf(QStringLiteral("name2"))).toString(),
-                               query.value(rec.indexOf(QStringLiteral("name3"))).toString()
+                               query.value(rec.indexOf(QStringLiteral("name2"))).toString()
                                );
         } else {
             QMessageBox::warning(this, tr("Error execution sql query!"),

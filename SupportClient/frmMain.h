@@ -28,7 +28,7 @@ public:
     ~FrmMain();
 
     void initDB(QString dbName);
-    void setUserInfo(QString user, QString name1, QString name2, QString name3);
+    void setUserInfo(QString user, QString name1, QString name2);
 
 protected:
     bool event(QEvent *p_event);
@@ -39,7 +39,6 @@ private:
         QString user;
         QString name1;
         QString name2;
-        QString name3;
     };
 
     Ui::FrmMain *ui;
@@ -66,7 +65,6 @@ private:
             const QString& strUser,
             const QString& strName1,
             const QString& strName2,
-            const QString& strName3,
             const QString& strPhone,
             const QString& strQuestion,
             const QString& strAnswer,
