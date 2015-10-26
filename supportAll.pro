@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 
 SUBDIRS = \
     supportClient \
-    supportServer 
+    supportServer \
+    qmlchart

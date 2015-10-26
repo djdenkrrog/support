@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>content/ChartStatic.qml</file>
+        <file>content/userscall.xml</file>
+        <file>main.qml</file>
+        <file>content/CountCallsDelegate.qml</file>
+        <file>content/Logo.qml</file>
+        <file>content/images/qtlogoback.png</file>
+        <file>content/images/qtlogofront.png</file>
+    </qresource>
+</RCC>

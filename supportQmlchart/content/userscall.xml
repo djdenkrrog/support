@@ -1,0 +1,48 @@
+<!DOCTYPE support>
+<calls>
+ <callInfo number="1">
+  <user_r>user</user_r>
+  <name>Sidorov Petro</name>
+  <countcalls>200</countcalls>
+ </callInfo>
+ <callInfo number="2">
+  <user_r>user1</user_r>
+  <name>Vasyukov Anton</name>
+  <countcalls>234</countcalls>
+ </callInfo>
+ <callInfo number="3">
+  <user_r>user2</user_r>
+  <name>Borodina Polina</name>
+  <countcalls>322</countcalls>
+ </callInfo>
+ <callInfo number="4">
+  <user_r>user3</user_r>
+  <name>Antonova Vasilisa</name>
+  <countcalls>458</countcalls>
+ </callInfo>
+ <callInfo number="5">
+  <user_r>user4</user_r>
+  <name>Gorbunov Oleg</name>
+  <countcalls>23</countcalls>
+ </callInfo>
+ <callInfo number="6">
+  <user_r>user5</user_r>
+  <name>Kazakova Anastasiya</name>
+  <countcalls>146</countcalls>
+ </callInfo>
+ <callInfo number="7">
+  <user_r>user6</user_r>
+  <name>Mazurina Svetlana</name>
+  <countcalls>456</countcalls>
+ </callInfo>
+ <callInfo number="8">
+  <user_r>user7</user_r>
+  <name>Mulyukova Sofiya</name>
+  <countcalls>377</countcalls>
+ </callInfo>
+ <callInfo number="9">
+  <user_r>user8</user_r>
+  <name>Skachok Ivan</name>
+  <countcalls>553</countcalls>
+ </callInfo>
+</calls>
