@@ -77,6 +77,7 @@ Window {
 
     Component {
         id: countCallsComponent
+
         CountCallsDelegate {
             name: model.name
             personalId: model.user
@@ -103,7 +104,7 @@ Window {
         ListView {
             id: listView
 
-            property var currentItem: null;
+            property var previousItem: null
 
             anchors.fill: parent
             anchors.margins: 3
@@ -112,7 +113,8 @@ Window {
                 color: "blue"
                 radius: 10
             }
-            highlightFollowsCurrentItem: false
+            currentIndex: -1
+            highlightFollowsCurrentItem: true
 
             model: xmlModel
             delegate: countCallsComponent
@@ -139,8 +141,30 @@ Window {
 
         ChartStatic {
             id: chart
+
             modelXml: xmlModel
             listView: listView
+
+            onSelectedChart: {
+                if (index < 0) {
+                    if (listView.currentItem) {
+                       listView.currentItem.setGradientColorUnselected();
+                       listView.previousItem = null;
+                       listView.currentIndex = index;
+                       updateCanvas();
+                    }
+                    return;
+                }
+
+                if (listView.currentItem) {
+                    listView.previousItem = listView.currentItem;
+                }
+                listView.currentIndex = index;
+
+                if (listView.currentItem) {
+                    listView.currentItem.updateSelectedRow();
+                }
+            }
         }
     }
 }

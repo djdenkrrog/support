@@ -6,13 +6,22 @@ Item {
     property string name: "name"
     property string personalId: "Id"
 
-    property var view: ListView.view
-    property var isCurrent: ListView.isCurrentItem
-
     property color gradientColorBegin: "white"
     property color gradientColorEnd: "gray"
 
+    property var view: ListView.view
+
     signal selected()
+
+    function updateSelectedRow()
+    {
+        if (view.previousItem) {
+            view.previousItem.setGradientColorUnselected();
+        }
+        countCallsDelegate.selected();
+        setGradientColorSelected();
+        view.currentIndex = model.index;
+    }
 
     function setGradientColorSelected() {
         gradientColorBegin = "white";
@@ -58,16 +67,12 @@ Item {
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
         onClicked: {
-            view.highlightFollowsCurrentItem = true;
             if (view.currentItem) {
                 view.currentItem.setGradientColorUnselected();
             }
-
             countCallsDelegate.selected();
             setGradientColorSelected();
-            view.currentItem = countCallsDelegate;
             view.currentIndex = model.index;
-
         }
     }
 }

@@ -10,6 +10,8 @@ Rectangle {
     property var listView: null
     property bool drawChart: true
 
+    signal selectedChart(int index)
+
     function updateCanvas()
     {
         canvas.requestPaint();
@@ -28,6 +30,8 @@ Rectangle {
 
         property real yGridStep: height / 12
         property real yGridOffset: height / 26
+
+        property var usersCalls: [];
 
         function drawBackground(ctx)
         {
@@ -87,7 +91,7 @@ Rectangle {
             ctx.restore();
         }
 
-        function drawRectCountCalls(ctx, usersCalls, highestCountCalls)
+        function drawRectCountCalls(ctx, highestCountCalls)
         {
             ctx.save();
             ctx.globalAlpha = 0.8;
@@ -102,21 +106,27 @@ Rectangle {
             var rectWidth = (xOrigin - xOffsetLeft - usersCalls.length * rectMargin) / usersCalls.length;
 
             var x = xOffsetLeft;
+            var isSelected = false;
             for (var i = 0; i < usersCalls.length; i++) {
+                isSelected = false;
                 var y = yOrigin - usersCalls[i].countCalls *
                         ((yOrigin - canvas.yGridOffset)  / highestCountCalls);
 
-                ctx.fillStyle = "red";
                 if (chartStatic.listView && chartStatic.listView.currentItem &&
                         usersCalls[i].personalId === chartStatic.listView.currentItem.personalId) {
-                    ctx.fillStyle = "blue";
+                    isSelected = true;
                 }
 
-
+                ctx.fillStyle = isSelected ? "blue" : "red";
                 ctx.fillRect(x, y, rectWidth, yOrigin - y);
 
+                usersCalls[i].rect.x = x;
+                usersCalls[i].rect.y = y;
+                usersCalls[i].rect.width = rectWidth;
+                usersCalls[i].rect.height = yOrigin - y;
+
                 ctx.font = "bold 12px Arial";
-                ctx.fillStyle = "blue";
+                ctx.fillStyle = isSelected ? "red" : "blue";
                 ctx.fillText(usersCalls[i].countCalls, x, y - 3);
 
                 ctx.save();
@@ -136,6 +146,25 @@ Rectangle {
 
         }
 
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                var currentIndex = -1;
+
+                for (var i=0; i<canvas.usersCalls.length; i++) {
+                    if (mouseX > canvas.usersCalls[i].rect.x &&
+                            mouseX < (canvas.usersCalls[i].rect.x + canvas.usersCalls[i].rect.width) &&
+                            mouseY > canvas.usersCalls[i].rect.y &&
+                            mouseY < (canvas.usersCalls[i].rect.y + canvas.usersCalls[i].rect.height)) {
+                        currentIndex = canvas.usersCalls[i].index;
+                        break;
+                    }
+                }
+
+                chartStatic.selectedChart(currentIndex);
+            }
+       }
+
         onPaint: {
             if (parent.modelXml.status !== XmlListModel.Ready)
                 return;
@@ -146,14 +175,19 @@ Rectangle {
 
             var highestCountCalls = 0;
             var lowestCountCalls = 0;
-            var usersCalls = [];
             drawBackground(ctx);
 
+            usersCalls = [];
             for (var i = 0; i < modelXml.count; i++ ) {
                 usersCalls.push({
                                     name: modelXml.get(i).name,
                                     countCalls: modelXml.get(i).countcalls,
-                                    personalId: modelXml.get(i).user
+                                    personalId: modelXml.get(i).user,
+                                    index: i,
+                                    rect: {
+                                        x: 0, y: 0,
+                                        width: 0, height: 0
+                                    }
                                 });
             }
 
@@ -178,9 +212,10 @@ Rectangle {
             drawScales(ctx, highestCountCalls, lowestCountCalls);
 
             if (drawChart) {
-                drawRectCountCalls(ctx, usersCalls, highestCountCalls);
+                drawRectCountCalls(ctx, highestCountCalls);
             }
         }
+
     }
 }
 
