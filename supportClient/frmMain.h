@@ -4,8 +4,8 @@
 #include <QMainWindow>
 #include <QSqlDatabase>
 #include <QTableWidget>
-#include <QDebug.h>
-#include <QBoxLayout.h>
+#include <QDebug>
+#include <QBoxLayout>
 #include <QSqlQueryModel>
 #include <QStandardItemModel>
 #include <QDateTime>

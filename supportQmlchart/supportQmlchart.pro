@@ -13,9 +13,9 @@ CONFIG += c++11
 
 SOURCES += main.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += supportQml.qrc
 
-RC_FILE = qmlchart.rc
+RC_FILE = supportQmlchart.rc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
