@@ -8,10 +8,10 @@
 >2. login:user1
 >   passw:user1
 
-> ###  Keyboard shortcuts:
->  Ctrl-S - Save to add to the database record.
->  Ctrl-D - Get to work
->  Ctrl-W - Transfer data from the database to the fields to work.
+> ###  Keyboard shortcuts:<br>
+>  Ctrl-S - Save to add to the database record.<br>
+>  Ctrl-D - Get to work.<br>
+>  Ctrl-W - Transfer data from the database to the fields to work.<br>
 
 # SupportQmlchart:
  It indicates the number of call on the chart for each employee.
