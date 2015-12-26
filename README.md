@@ -11,6 +11,7 @@
   Ctrl-S - Save to add to the database record.</br>
   Ctrl-D - Get to work </br>
   Ctrl-W - Transfer data from the database to the fields to work.</br>
+
 <b>SupportQmlchart:</b><br>
  It indicates the number of call on the chart for each employee.</br>
 <b>ControlWorkTime:</b><br>
