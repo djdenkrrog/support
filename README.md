@@ -7,7 +7,6 @@
      passw:user
   2. login:user1
      passw:user1
-
 > Keyboard shortcuts:
   Ctrl-S - Save to add to the database record.
   Ctrl-D - Get to work
