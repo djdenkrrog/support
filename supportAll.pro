@@ -3,4 +3,6 @@ TEMPLATE = subdirs
 SUBDIRS = \
     supportClient \
     supportServer \
-    supportQmlchart
+    supportQmlchart \
+    controlWorkingTime
+

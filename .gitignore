@@ -1,4 +1,5 @@
 /support*/build
+/control*/build
 Makefile
 *.pro.user*
 *.pro.user
