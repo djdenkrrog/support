@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/icon.png</file>
+        <file>images/exit.png</file>
+        <file>images/about.png</file>
+        <file>images/leave64.png</file>
+        <file>images/coming64.png</file>
+        <file>images/restore64.png</file>
+    </qresource>
+</RCC>
