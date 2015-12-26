@@ -1,6 +1,8 @@
 # SupportServer:
    The emulator works TAPI server. Sends a specified port of the phone numbers of incoming calls.
-# SupportClient: Demo program for support services. Demonstration of work with different technologies in Qt.
+# SupportClient: 
+  Demo program for support services. Demonstration of work with different technologies in Qt.
+
   Users login:
   1. login:user
      passw:user
